@@ -1,49 +1,355 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+                <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+                <link rel="stylesheet" href="css/reveal.css">
+                <link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+                <!-- Theme used for syntax highlighting of code -->
+                <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+                  <style type="text/css">
+                    .left-aligned {
+                    text-align: left;
+                    }
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+                    .quote-reference {
+                    display: block;
+                    text-align: right;
+                    filter: brightness(65%);
+                    }
+                    .quote-reference::before {
+                    content: '― ';
+                    }
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+                    blockquote.wall-of-text {
+                    font-size: 75%;
+                    }
+
+                    img.thumbnail {
+                    width: 2em;
+                    height: 1.5em;
+                    }
+                  </style>
+
+                <!-- Printing and PDF exports -->
+                <script>
+                        var link = document.createElement( 'link' );
+                        link.rel = 'stylesheet';
+                        link.type = 'text/css';
+                        link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+                        document.getElementsByTagName( 'head' )[0].appendChild( link );
+                </script>
+        </head>
+        <body>
+                <div class="reveal">
+                        <div class="slides">
+                          <section>
+                            <h1>Domain Specific Languages in Clojure</h1>
+                            <h2>Atamert Ölçgen</h2>
+                            <h3>October 2017 - Singapore Clojure Group </h3>
+                          </section>
+                          <section><!-- What is a DSL -->
+                            <section>
+                              <h2>What Is a DSL Good For?</h2>
+                            </section>
+                            <section>
+                              <h2>Lingua Franca</h2>
+                              <blockquote class="left-aligned">
+                                /ˌlɪŋɡwə ˈfraŋkə/<br />
+                                noun<br />
+                                <br />
+                                A language that is adopted as a common language between speakers whose native languages are different.
+                              </blockquote>
+                            </section>
+                            <section>
+                              <blockquote>
+                                “a problem well put is half solved.”
+                                <span class="quote-reference">John Dewey</span>
+                              </blockquote>
+                            </section>
+                            <section>
+                              <h2>We use DSL's to...</h2>
+                              <h4 class="fragment">State the problem we are trying to solve<span class="fragment"> explicitly</span><span class="fragment"> &amp; correctly.</span></h4>
+                            </section>
+                            <section>
+                              <h2>What Is a DSL Good For?</h2>
+                              <ul>
+                                <li>We use DSL's to state the problem we are trying to solve explicitly & correctly.</li>
+                              </ul>
+                            </section>
+                            <section>
+                              <blockquote class="wall-of-text">
+                                &ldquo;When concepts are integrated into a wider one, the new concept includes all the characteristics of its constituent units; but their distinguishing characteristics are regarded as omitted measurements, and one of their common characteristics determines the distinguishing characteristic of the new concept: the one representing their &lsquo;Conceptual Common Denominator&rsquo; with the existents from which they are being differentiated.&rdquo;
+                                <span class="quote-reference">Ayn Rand (<a target="_blank" href="http://aynrandlexicon.com/lexicon/conceptual_common_denominator.html">ItOE</a>)</span>
+                              </blockquote>
+                            </section>
+                            <section>
+                              <img src="img/tables.png" />
+                            </section>
+                            <section>
+                              <img src="img/chairs.png" />
+                            </section>
+                            <section>
+                              <img src="img/sofas.png" />
+                            </section>
+                            <section>
+                              <img src="img/furniture.png" />
+                            </section>
+                            <section>
+                              <h2>We use DSL's to...</h2>
+                              <h4 class="fragment">Hide implementation details.</h4>
+                            </section>
+                            <section>
+                              <h2>What Is a DSL Good For?</h2>
+                              <ul>
+                                <li>We use DSL's to state the problem we are trying to solve explicitly &amp; correctly.</li>
+                                <li>We use DSL's to hide implementation details.</li>
+                              </ul>
+                            </section>
+                          </section>
+                          <section><!-- Clojure AST -->
+                            <section>
+                              <img src="img/tree1.png" />
+                            </section>
+                            <section>
+                              <img src="img/tree2.png" />
+                            </section>
+                            <section>
+                              <img src="img/tree3.png" />
+                            </section>
+                          </section>
+			  <section>
+			    <section>
+			      <h2>Independent vs Embedded</h2>
+			      <ul>
+				<li class="fragment">An embedded DSL runs within the host environment. As a result host language is fully (or mostly) available.</li>
+				<li class="fragment">An independent DSL runs above the host environment. Therefore host language is not directly available. All interaction must be performed through declared interfaces. This opacity also means the host environment can be replaced without any changes to the independent DSL.</li>
+			      </ul>
+			    </section>
+			    <section>
+			      <h4>Independent DSL Example: Instaparse</h4>
+			      <pre class="fragment"><code data-trim class="nohighlight">
+				PROGRAM = (WHITESPACE | COMMENT | APPLICATION)*
+				APPLICATION = &quot;(&quot; (WHITESPACE | ATOM | LIST | APPLICATION)* &quot;)&quot;
+				&lt;ATOM&gt; = SYMBOL
+				(* &lt;ATOM&gt; = BOOLEAN | NUMBER | STRING | SYMBOL *)
+				(* BOOLEAN = &quot;True&quot; | &quot;False&quot; *)
+				COMMENT = #&quot;;;\p{Blank}*&quot; #&quot;[^\s]?[^\n]*&quot; &quot;\n&quot;
+				LIST = &quot;[&quot; (WHITESPACE | ATOM | LIST | APPLICATION)* &quot;]&quot;
+				(* NUMBER = #&quot;-?\d+(\.\d+)?&quot; *)
+				(* STRING = (&lt;&quot;\&quot;&quot;&gt; #&quot;[^\&quot;]* &lt;&quot;\&quot;&quot;&gt;) | (&lt;&quot;'&quot;&gt; #&quot;[^']* &lt;&quot;'&quot;&gt;) *)
+				SYMBOL = #"\w[\w\d-]*"
+				WHITESPACE = #"\s+"
+                              </code></pre>
+			      <p class="fragment">
+				<a href="https://github.com/Engelberg/instaparse">Instaparse</a>
+			      </p>
+			    </section>
+			  </section>
+			  <section><!-- Shapes Language -->
+			    <section>
+			      <h2>Shape Language</h2>
+			      <p class="fragment">
+				Inspiration: <a href="http://haskell.cs.yale.edu/?post_type=publication&p=366">Haskell vs. Ada vs. C++ vs. Awk vs. ... An Experiment in Software Prototyping Productivity</a>
+			      </p>
+			      <img class="fragment" style="height: 10em; width 14.5em;" src="img/prototyping-geometry.png" />
+			    </section>
+			    <section>
+			      <h2>Shape Language</h2>
+			      <ul>
+				<li>Describe simple and compound shapes.</li>
+				<li>Check if a point is inside a a shape.</li>
+			      </ul>
+			    </section>
+			    <section>
+			      <h2>Shape Language</h2>
+			      <pre><code data-trim class="clojure">
+				(inside? some-shape some-point) ;; => true | false
+			      </code></pre> 
+			    </section>
+			    <section>
+			      <h2>Shape Language</h2>
+			      <ol>
+				<li>Primitives</li>
+				<li>Means of <strong>combination</strong></li>
+				<li>Means of <strong>abstraction</strong></li>
+			      </ol>
+			    </section>
+			    <section>
+			      <h2>Primitives</h2>
+			      <pre><code data-trim data-noescape class="clojure">
+				(point x y)   ;; x &amp; y are coordinates
+				
+				circle        ;; unit circle centered at the origin
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h2>Combination</h2>
+			      <pre><code data-trim data-noescape class="clojure">
+				;; All functions return a new shape
+				<span class="fragment">				  
+				(translate shape dx dy)
+
+				(scale shape factor)
+				</span><span class="fragment">
+				(union a b ...)
+				
+				(intersection a b ...)
+				</span>
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h2>Abstraction</h2>
+			      <div class="fragment">
+				<h3>Clojure!</h3>
+				<p>This is an <em>embedded</em> DSL.</p>
+			      </div>
+			    </section>
+			    <section>
+			      <h2>Implementation</h2>
+			      <ul>
+				<li>Outside in</li>
+				<li>Closure</li>
+				<li>Syntactic sugar</li>
+			      </ul>
+			    </section>
+			    <section>
+			      <h3>Outside In</h3>
+			      <pre><code data-trim data-noescape class="clojure">
+				(defn point [x y] (->Point x y))
+
+				(def origin (point 0 0))
+
+				(def circle (->Circle origin 1))
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h3>Outside In</h3>
+			      <pre><code data-trim data-noescape class="clojure">
+				(defprotocol Shape
+				  (inside? [this other])
+				  (scale [this s])
+				  (translate [this dx dy]))
+			      </code></pre>
+			      <pre class="fragment"><code data-trim data-noescape class="clojure">
+				(defrecord Point [x y]
+				  Shape
+				  (inside? [this other]
+				    (and (instance? Point other)
+				    (= this other)))
+				  (scale [_ s]
+				    (->Point (* x s)
+				    (* y s)))
+				  (translate [_ dx dy]
+				    (->Point (+ x dx)
+				    (+ y dy))))
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h3>Closure</h3>
+			      <pre class="fragment"><code data-trim data-noescape class="clojure">
+				;; Define a circle centered at (4, 3) with a radius of 5
+				<span class="fragment">
+				(def some-circle
+				  (-> circle
+				      (scale 5)
+				      (translate 4 3)
+				</span><span class="fragment">
+				;; origin must be inside this shape
+
+				(inside? some-circle origin) ;; => true<span>
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h3>Syntactic Sugar</h3>
+			      <pre><code data-trim class="clojure">
+				(->Point x y)  ;; concrete, Point record
+			      </code></pre>
+			      <p>vs.</p>
+			      <pre><code data-trim class="clojure">
+				(point x y)    ;; abstract shape
+			      </code></pre>
+			    </section>
+			    <section>
+			      <h3>Syntactic Sugar</h3>
+			      <pre><code data-trim class="clojure">
+				(def list-and-an-item
+				  (gen/bind (gen/not-empty (gen/vector gen/byte))
+				    (fn [xs] (gen/tuple (gen/elements xs)
+				                        (gen/return xs)))))
+			      </code></pre>
+			      <div class="fragment">
+			      <p>vs.</p>
+			      <pre><code data-trim class="clojure">
+				(def list-and-an-item-2
+				  (gen/let [xs (gen/not-empty (gen/vector gen/byte))
+				            elem (gen/elements xs)]
+				    [elem xs]))
+			      </code></pre>
+			      </div>
+			      <p class="fragment"><a href="https://github.com/clojure/test.check/blob/master/src/main/clojure/clojure/test/check/generators.cljc#L1593-L1651">
+				clojure.test.check.generators/let
+			      </a></p>
+			    </section>
+			    <section>
+			      <h3>Optimizations</h3>
+			      <ul>
+				<li class="fragment">Shape simplification</li>
+				<li class="fragment">Transform elimination</li>
+				<li class="fragment">Use transform matrix</li>
+			      </ul>
+			    </section>
+			  </section>
+			  <section>
+			    <h2>Thanks!</h2>
+			    <p><a href="https://muhuk.github.io/clojure-dsl-presentation">muhuk.github.io/clojure-dsl-presentation</a></p>
+			  </section>
+			  <!-- <section>
+                            <pre><code data-trim data-noescape>
+                              (defn my-filter [f coll]
+                              (if (empty? coll)
+                              coll
+                              <mark>(conj (rest coll) (f (first coll)))</mark>))
+                            </code></pre>
+                          </section>-->
+                          <section><!-- Links -->
+			    <h3>Appendix: Images</h3>
+                            <a target="_blank" href="https://pixabay.com/en/dining-table-restaurant-eating-1090128/"><img class="thumbnail" src="img/dining-table.jpeg" /></a>
+                            <a target="_blank" href="https://www.flickr.com/photos/bonsoni_uk/11667289565"><img class="thumbnail" src="img/coffee-table.jpeg" /></a>
+                            <a target="_blank" href="https://www.flickr.com/photos/best4garden/9015642749"><img class="thumbnail" src="img/picnic-table.jpeg" /></a>
+                            <a target="_blank" href="https://www.pexels.com/photo/chair-furniture-furniture-pieces-sit-279690/"><img class="thumbnail" src="img/chair.jpeg" /></a>
+                            <a target="_blank" href="https://pxhere.com/en/photo/754194"><img class="thumbnail" src="img/chair2.jpeg" /></a>
+                            <a target="_blank" href="https://pixabay.com/en/cantilever-chair-metal-black-1175434/"><img class="thumbnail" src="img/chair3.jpeg" /></a>
+
+                            <a target="_blank" href="https://pixnio.com/furniture/architecture-apartment-carpet-chair-comfort-rug-seat-sofa"><img class="thumbnail" src="img/sofa.jpeg" /></a>
+                            <a target="_blank" href="http://maxpixel.freegreatpicture.com/Upholstery-Sofa-Couch-Lifestyle-Interior-Room-89020"><img class="thumbnail" src="img/sofa2.jpeg" /></a>
+                            <a target="_blank" href="https://www.flickr.com/photos/ter-burg/14893517887"><img class="thumbnail" src="img/sofa3.jpeg" /></a>
+			    <a target="_blank" href="http://www.cse.chalmers.se/edu/course/TDA452_Functional_Programming/lectures/LooseEnds.html"><img class="thumbnail" src="img/prototyping-geometry.png" /></a>
+                          </section>
+                        </div>
+                </div>
+
+                <script src="lib/js/head.min.js"></script>
+                <script src="js/reveal.js"></script>
+
+                <script>
+                        // More info about config & dependencies:
+                        // - https://github.com/hakimel/reveal.js#configuration
+                        // - https://github.com/hakimel/reveal.js#dependencies
+                        Reveal.initialize({
+                                dependencies: [
+                                        { src: 'plugin/markdown/marked.js' },
+                                        { src: 'plugin/markdown/markdown.js' },
+                                        { src: 'plugin/notes/notes.js', async: true },
+                                        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                                ],
+                                history: true
+                        });
+                </script>
+        </body>
 </html>
